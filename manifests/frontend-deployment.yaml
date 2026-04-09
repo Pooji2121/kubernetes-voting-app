@@ -1,33 +1,30 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: frontend
-  namespace: cloudchamp
+  name: voting-frontend
+  namespace: voting-app
   labels:
-    role: frontend
-    env: demo
+    app: voting-app
+    tier: frontend
 spec:
   replicas: 2
-  strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 25%
   selector:
     matchLabels:
-      role: frontend
+      app: voting-app
+      tier: frontend
   template:
     metadata:
       labels:
-        role: frontend
+        app: voting-app
+        tier: frontend
     spec:
       containers:
-      - name: frontend
-        image: cloudacademydevops/frontend:v11
+      - name: voting-frontend
+        image: pooji09/voting-frontend:latest
         imagePullPolicy: Always
         env:
           - name: REACT_APP_APIHOSTPORT
-            value: $API_ELB_PUBLIC_FQDN #add your API_Load_Balancer DNS manually here if app does not run
+            value: http://voting-api-service
         ports:
         - containerPort: 8080
         livenessProbe:
@@ -38,8 +35,7 @@ spec:
           periodSeconds: 5
         readinessProbe:
           httpGet:
-             path: /ok
-             port: 8080
+            path: /ok
+            port: 8080
           initialDelaySeconds: 5
           periodSeconds: 5
-          successThreshold: 1
