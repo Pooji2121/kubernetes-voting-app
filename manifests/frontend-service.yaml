@@ -1,14 +1,13 @@
-#Imperative command to create service to expose frontend deployment 
-#kubectl expose deploy frontend \ --name=frontend \ --type=LoadBalancer \ --port=80 \ --target-port=8080
 apiVersion: v1
 kind: Service
 metadata:
-  name: frontend
+  name: voting-frontend-service
   labels:
-    app: frontend
+    app: voting-app
 spec:
   selector:
-    role: frontend
+    app: voting-app
+    tier: frontend
   ports:
     - protocol: TCP
       port: 80
