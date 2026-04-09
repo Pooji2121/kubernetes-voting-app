@@ -1,15 +1,16 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: mongo
-  namespace: cloudchamp
+  name: mongo-service
+  namespace: voting-app
   labels:
-    role: db
-    env: demo
+    app: voting-app
+    tier: database
 spec:
   ports:
-  - port: 27017
-    targetPort: 27017
+    - port: 27017
+      targetPort: 27017
   clusterIP: None
   selector:
-    role: db
+    app: voting-app
+    tier: database
