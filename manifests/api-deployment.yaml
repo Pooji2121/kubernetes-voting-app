@@ -1,29 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: api
-  namespace: cloudchamp
+  name: voting-api
+  namespace: voting-app
   labels:
-    role: api
-    env: demo
+    app: voting-app
+    tier: backend
 spec:
   replicas: 2
-  strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 25%
   selector:
     matchLabels:
-      role: api
+      app: voting-app
   template:
     metadata:
       labels:
-        role: api
+        app: voting-app
     spec:
       containers:
-      - name: api
-        image: cloudacademydevops/api:v3
+      - name: voting-api
+        image: pooji09/voting-api:latest
         imagePullPolicy: Always
         env:
           - name: MONGO_CONN_STR
@@ -48,8 +43,7 @@ spec:
           periodSeconds: 5
         readinessProbe:
           httpGet:
-             path: /ok
-             port: 8080
+            path: /ok
+            port: 8080
           initialDelaySeconds: 5
           periodSeconds: 5
-          successThreshold: 1
